@@ -38,12 +38,9 @@ public class CartFacadeREST extends AbstractFacadeREST {
             if(event == null)
                 return jsonError("Evento inválido");
             
-            Entities.Cart c = core.getCart(); 
-            c.add(event, cart.getQuantity());
+            core.addInCart(event, cart.getQuantity());
 
-            core.setCart(c);
-
-            result.setSuccess(c);
+            result.setSuccess(core.getCart());
             
             return jsonSuccess();
             
@@ -51,4 +48,29 @@ public class CartFacadeREST extends AbstractFacadeREST {
             return jsonError("Falha em adicionar no carrinho");
         }
     }
+    
+        
+    @Path("remove")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String removeInCart(Cart cart){
+        try{
+            
+            Event event =  eventController.findEvent(cart.getEventId());
+            
+            if(event == null)
+                return jsonError("Evento inválido");
+            
+            core.removeInCart(event, cart.getQuantity());
+            
+            result.setSuccess(core.getCart());
+            
+            return jsonSuccess();
+            
+        }catch(Exception e){
+            return jsonError("Falha em adicionar no carrinho");
+        }
+    }
+    
 }

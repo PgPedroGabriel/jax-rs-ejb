@@ -30,36 +30,45 @@ public class CoreSessionBean implements CoreInterface{
     @PostConstruct
     public void initialize() {
         cart = new Entities.Cart();
+        user = new Entities.User();
     }
     
+    @Override
     public Entities.User getUser() {
         return user;
     }
 
+    @Override
     public void setUser(Entities.User user) {
         this.user = user;
     }
     
+    @Override
     public boolean isLogged(){
         return user != null;
     }
 
+    @Override
     public Entities.Cart getCart() {
         return cart;
     }
 
+    @Override
     public void setCart(Entities.Cart cart) {
         this.cart = cart;
     }
     
+    @Override
     public void addInCart(Entities.Event e, Integer quantity){
         cart.add(e, quantity);
     }
     
+    @Override
     public void removeInCart(Entities.Event e, Integer quantity){
         cart.remove(e, quantity);
     }
     
+    @Override
     public Map<String, Entities.BaseEntity> getSession(){
         
         Map<String, Entities.BaseEntity> map = new HashMap<String, Entities.BaseEntity>();
