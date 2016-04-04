@@ -32,13 +32,12 @@ public class EventFacedeREST extends AbstractFacadeREST{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getEvents(){
-        ResultDefault result = new ResultDefault();
         
         List<Event> events = this.controller.findEventEntities();
     
         result.setSuccess(events);
         
-        return gson.toJson(result);
+        return jsonSuccess();
     }
     
     
@@ -46,21 +45,21 @@ public class EventFacedeREST extends AbstractFacadeREST{
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public String getEvent(@PathParam("id") Long id){
-        ResultDefault result = new ResultDefault();
         
         Event event = this.controller.findEvent(id);
-    
+        
+        if(event == null)
+            return jsonError("Evento invalido");
+        
         result.setSuccess(event);
         
-        return gson.toJson(result);
+        return jsonSuccess();
     }
     
     @POST
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8" )
     @Consumes(MediaType.APPLICATION_JSON)
     public String createEvent(EventLocation eventLocation){
-        ResultDefault result = new ResultDefault();
-        
         try{
             
             Event event = new Event(eventLocation);
@@ -71,10 +70,10 @@ public class EventFacedeREST extends AbstractFacadeREST{
             
         } catch(Exception e){
             
-            result.setError("Falha ao criar evento");
+            return jsonError("Falha ao criar evento");
         
         }
     
-        return gson.toJson(result);
+        return jsonSuccess();
     }
 }

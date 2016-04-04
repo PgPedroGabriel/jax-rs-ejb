@@ -7,6 +7,7 @@ package Rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jsonResponse.ResultDefault;
 
 /**
  *
@@ -15,11 +16,28 @@ import com.google.gson.GsonBuilder;
 public abstract class AbstractFacadeREST {
     
     protected final Gson gson;
+    protected final ResultDefault result;
     
     public AbstractFacadeREST() {
         gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
+        
+        result = new ResultDefault();
     }
     
+    public ResultDefault setError(String message){
+        
+        result.setError(message);
+        
+        return result;
+    }
+    
+    public String jsonError(String message){
+        return gson.toJson(setError(message));
+    }
+    
+    public String jsonSuccess(){
+        return gson.toJson(result);
+    }
 }

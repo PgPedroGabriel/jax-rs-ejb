@@ -26,7 +26,7 @@ import jsonResponse.ResultDefault;
 public class UserFacadeREST extends AbstractFacadeREST{
 
     @EJB private UserDAOBean controller;
-    @EJB private Bean.User core;
+    @EJB private Bean.CoreInterface core;
     
     public UserFacadeREST() {
     }
@@ -83,17 +83,16 @@ public class UserFacadeREST extends AbstractFacadeREST{
     @Consumes(MediaType.APPLICATION_JSON)
     public String register(User user){
         
-        ResultDefault result = new ResultDefault();
-        
         try{
             controller.create(user);
+            
             result.setSuccess(user);
 
         } catch (Exception e){
-            result.setError("Falha em criar usuario");
+            return jsonError("Falha em criar usuario");
         }
 
-        return this.gson.toJson(result);
+        return jsonSuccess();
     }
     
     @POST
@@ -102,12 +101,8 @@ public class UserFacadeREST extends AbstractFacadeREST{
     @Consumes(MediaType.APPLICATION_JSON)
     public String doLogin(Login loginRequest){
         
-        ResultDefault result = new ResultDefault();
-        
         if(core.isLogged()){
-
-            result.setError("Você está logado.");
-            return gson.toJson(result);
+            return jsonError("Já existe uma sessão criada.");
         }
         
         try {
@@ -117,15 +112,16 @@ public class UserFacadeREST extends AbstractFacadeREST{
                 
                 result.setSuccess(user);
                 core.setUser(user);
+                
             } else {
-                result.setError("Login/Senha inválido");
+                return jsonError("Login/Senha inválido");
             }
             
         } catch(Exception e){
-            result.setError("Login/Senha inválido");
+            return jsonError("Login/Senha inválido");
         }
         
-        return gson.toJson(result);
+        return jsonSuccess();
     }
     
 }

@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(Rest.CartFacadeREST.class);
         resources.add(Rest.EventFacedeREST.class);
         resources.add(Rest.UserFacadeREST.class);
     }

@@ -5,24 +5,31 @@
  */
 package Bean;
 
+import com.google.common.collect.HashBiMap;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Stateful;
+import javax.json.Json;
+import javax.json.JsonObject;
 
 /**
  *
  * @author pedro
  */
 @Stateful
-public class CoreSessionBean implements User{
+public class CoreSessionBean implements CoreInterface{
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     
     private Entities.User user;
+    private Entities.Cart cart;
 
     @PostConstruct
     public void initialize() {
+        cart = new Entities.Cart();
     }
     
     public Entities.User getUser() {
@@ -35,5 +42,31 @@ public class CoreSessionBean implements User{
     
     public boolean isLogged(){
         return user != null;
+    }
+
+    public Entities.Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Entities.Cart cart) {
+        this.cart = cart;
+    }
+    
+    public void addInCart(Entities.Event e, Integer quantity){
+        cart.add(e, quantity);
+    }
+    
+    public void removeInCart(Entities.Event e, Integer quantity){
+        cart.remove(e, quantity);
+    }
+    
+    public Map<String, Entities.BaseEntity> getSession(){
+        
+        Map<String, Entities.BaseEntity> map = new HashMap<String, Entities.BaseEntity>();
+        
+        map.put("user", user);
+        map.put("cart", cart);
+        
+        return map;
     }
 }
